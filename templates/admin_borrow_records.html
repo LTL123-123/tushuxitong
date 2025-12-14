@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>借阅记录管理 - 管理员中心</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .records-container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-btn {
+            padding: 8px 16px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .records-table th, .records-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .records-table th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+        .status-normal {
+            color: #34a853;
+            font-weight: 600;
+        }
+        .status-overdue {
+            color: #d93025;
+            font-weight: 600;
+        }
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-container"></div>
+    <div class="records-container">
+        <div class="header">
+            <a href="{{ url_for('admin_home') }}" class="back-btn">返回首页</a>
+        </div>
+        {% if records %}
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <<th>读者账号</</th>
+                        <<th>图书名称</</th>
+                        <<th>借阅时间</</th>
+                        <<th>应还时间</</th>
+                        <<th>归还时间</</th>
+                        <<th>状态</</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                        <tr>
+                            <td>{{ record.username }}</td>
+                            <td>{{ record.title }}</td>
+                            <td>{{ record.borrow_time }}</td>
+                            <td>{{ record.due_time }}</td>
+                            <td>{{ record.return_time or '未归还' }}</td>
+                            <td>
+                                {% if record.status == 1 %}
+                                    <span class="status-normal">在借</span>
+                                {% elif record.status == 2 %}
+                                    <span>已还</span>
+                                {% elif record.status == 3 %}
+                                    <span class="status-overdue">逾期</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-data">暂无借阅记录</div>
+        {% endif %}
+    </div>
+</body>
+</html>

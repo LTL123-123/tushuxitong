@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员中心 - 图书管理系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url("{{ url_for('static', filename='images/library-bg.jpg') }}");
+            background-size: cover;
+            background-attachment: fixed;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .header {
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        .welcome-message {
+            font-size: 16px;
+        }
+
+        .logout-btn {
+            padding: 6px 12px;
+            background-color: #d93025;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* 核心修改：缩小模块尺寸 */
+        .functions-container {
+            max-width: 1000px; /* 缩小容器最大宽度 */
+            margin: 30px auto; /* 减少上下边距 */
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px; /* 缩小模块间距 */
+        }
+
+        .function-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px 15px; /* 减少内边距 */
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .function-card:hover {
+            transform: translateY(-3px); /* 轻微上浮效果 */
+        }
+
+        .card-icon {
+            font-size: 36px; /* 缩小图标 */
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 18px; /* 缩小标题 */
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .card-desc {
+            color: #666;
+            font-size: 13px; /* 缩小描述文字 */
+            margin-bottom: 15px;
+            line-height: 1.4;
+            padding: 0 5px; /* 限制描述文字宽度 */
+        }
+
+        .card-btn {
+            display: inline-block;
+            padding: 8px 16px; /* 缩小按钮 */
+            background-color: #d93025;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .card-btn:hover {
+            background-color: #c5221f;
+        }
+
+        /* 小屏幕适配 */
+        @media (max-width: 768px) {
+            .functions-container {
+                grid-template-columns: 1fr;
+                grid-gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="welcome-message">欢迎您，{{ session['username'] }}（管理员）</div>
+        <a href="{{ url_for('logout') }}" class="logout-btn">退出登录</a>
+    </div>
+
+    <div class="functions-container">
+        <!-- 图书管理 -->
+        <div class="function-card">
+            <div class="card-icon">📚</div>
+            <h3 class="card-title">图书管理</h3>
+            <p class="card-desc">添加、编辑、删除图书，修改库存状态</p>
+            <a href="{{ url_for('admin_book_manage') }}" class="card-btn">管理图书</a>
+        </div>
+
+        <!-- 借阅记录 -->
+        <div class="function-card">
+            <div class="card-icon">📝</div>
+            <h3 class="card-title">借阅记录</h3>
+            <p class="card-desc">查看所有用户借阅记录，处理逾期</p>
+            <a href="{{ url_for('admin_borrow_records') }}" class="card-btn">查看记录</a>
+        </div>
+
+        <!-- 用户管理 -->
+        <div class="function-card">
+            <div class="card-icon">👥</div>
+            <h3 class="card-title">用户管理</h3>
+            <p class="card-desc">查看、冻结/解冻读者账号</p>
+            <a href="{{ url_for('admin_user_manage') }}" class="card-btn">管理用户</a>
+        </div>
+
+        <!-- 归还申请 -->
+        <div class="function-card">
+            <div class="card-icon">🔄</div>
+            <h3 class="card-title">归还申请</h3>
+            <p class="card-desc">处理读者的图书归还申请</p>
+            <a href="{{ url_for('admin_return_requests') }}" class="card-btn">查看申请</a>
+        </div>
+    </div>
+</body>
+</html>

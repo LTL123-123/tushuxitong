@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理 - 管理员中心</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .users-container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-btn {
+            padding: 8px 16px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .users-table th, .users-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .users-table th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+        .status-normal {
+            color: #34a853;
+            font-weight: 600;
+        }
+        .status-frozen {
+            color: #d93025;
+            font-weight: 600;
+        }
+        .toggle-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .freeze-btn {
+            background-color: #d93025;
+            color: white;
+        }
+        .unfreeze-btn {
+            background-color: #34a853;
+            color: white;
+        }
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-container"></div>
+    <div class="users-container">
+        <div class="header">
+            <a href="{{ url_for('admin_home') }}" class="back-btn">返回首页</a>
+        </div>
+        {% if users %}
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <<th>读者账号</th>
+                        <<th>姓名</th>
+                        <<th>身份证号</th>
+                        <<th>手机号</th>
+                        <<th>状态</th>
+                        <<th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.id_card }}</td>
+                            <td>{{ user.phone or '未填写' }}</td>
+                            <td>
+                                {% if user.status == 1 %}
+                                    <span class="status-normal">正常</span>
+                                {% else %}
+                                    <span class="status-frozen">已冻结</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="post" action="{{ url_for('admin_toggle_user_status') }}" style="display:inline;">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <button type="submit" class="toggle-btn {% if user.status == 1 %}freeze-btn{% else %}unfreeze-btn{% endif %}">
+                                        {% if user.status == 1 %}冻结账号{% else %}解冻账号{% endif %}
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-data">暂无读者用户</div>
+        {% endif %}
+    </div>
+</body>
+</html>

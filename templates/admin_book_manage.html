@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理 - 管理员中心</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .manage-container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-btn {
+            padding: 8px 16px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .add-btn {
+            padding: 8px 16px;
+            background-color: #34a853;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .book-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .book-table th, .book-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .book-table th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+        .book-cover {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .edit-btn {
+            padding: 6px 12px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+            margin-right: 5px;
+        }
+        .delete-btn {
+            padding: 6px 12px;
+            background-color: #d93025;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            font-size: 16px;
+        }
+        .status-available {
+            color: #34a853;
+            font-weight: 500;
+        }
+        .status-unavailable {
+            color: #d93025;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-container"></div>
+    <div class="manage-container">
+        <div class="header">
+            <a href="{{ url_for('admin_home') }}" class="back-btn">返回首页</a>
+            <a href="{{ url_for('admin_add_book') }}" class="add-btn">添加图书</a>
+        </div>
+        {% if books %}
+            <table class="book-table">
+                <thead>
+                    <tr>
+                        <<th>图书封面</th>
+                        <<th>图书名称</th>
+                        <<th>作者</th>
+                        <<th>ISBN号</th>
+                        <<th>库存</th>
+                        <<th>状态</th>
+                        <<th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                        <tr>
+                            <td>
+                                {% if book.cover %}
+                                    <img src="{{ book.cover }}" class="book-cover" alt="{{ book.title }}">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='images/default-cover.jpg') }}" class="book-cover" alt="默认封面">
+                                {% endif %}
+                            </td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.author }}</td>
+                            <td>{{ book.isbn }}</td>
+                            <td>
+                                <form method="post" action="{{ url_for('admin_update_stock') }}" style="display:inline;">
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <input type="number" name="stock" value="{{ book.stock }}" min="0" style="width:60px; padding:4px;" required>
+                                    <button type="submit" style="padding:4px 8px; background:#4285f4; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">保存</button>
+                                </form>
+                            </td>
+                            <td>
+                                {% if book.stock > 0 %}
+                                    <span class="status-available">可借阅</span>
+                                {% else %}
+                                    <span class="status-unavailable">无库存</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin_edit_book', book_id=book.id) }}" class="edit-btn">编辑</a>
+                                <form method="post" action="{{ url_for('admin_delete_book') }}" style="display:inline;">
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <button type="submit" class="delete-btn" onclick="return confirm('确定删除该图书？')">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-data">暂无图书数据，请添加图书</div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>归还申请管理 - 管理员中心</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .requests-container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-btn {
+            padding: 8px 16px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .requests-table th, .requests-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .requests-table th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+        .status-pending {
+            color: #fbbc05;
+            font-weight: 600;
+        }
+        .status-approved {
+            color: #34a853;
+            font-weight: 600;
+        }
+        .status-rejected {
+            color: #d93025;
+            font-weight: 600;
+        }
+        .approve-btn {
+            padding: 6px 12px;
+            background-color: #34a853;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-right: 5px;
+        }
+        .reject-btn {
+            padding: 6px 12px;
+            background-color: #d93025;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-container"></div>
+    <div class="requests-container">
+        <div class="header">
+            <a href="{{ url_for('admin_home') }}" class="back-btn">返回首页</a>
+        </div>
+        {% if requests %}
+            <table class="requests-table">
+                <thead>
+                    <tr>
+                        <th>读者账号</th>
+                        <th>图书名称</th>
+                        <th>借阅时间</th>
+                        <th>应还时间</th>
+                        <th>申请时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                        <tr>
+                            <td>{{ req.username }}</td>
+                            <td>{{ req.title }}</td>
+                            <td>{{ req.borrow_time }}</td>
+                            <td>{{ req.due_time }}</td>
+                            <td>{{ req.request_time }}</td>
+                            <td>
+                                {% if req.status == 0 %}
+                                    <span class="status-pending">待审核</span>
+                                {% elif req.status == 1 %}
+                                    <span class="status-approved">已通过</span>
+                                {% elif req.status == 2 %}
+                                    <span class="status-rejected">已拒绝</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if req.status == 0 %}
+                                    <form method="post" action="{{ url_for('handle_return_request') }}" style="display:inline;">
+                                        <input type="hidden" name="request_id" value="{{ req.id }}">
+                                        <input type="hidden" name="action" value="approve">
+                                        <button type="submit" class="approve-btn">通过</button>
+                                    </form>
+                                    <form method="post" action="{{ url_for('handle_return_request') }}" style="display:inline;">
+                                        <input type="hidden" name="request_id" value="{{ req.id }}">
+                                        <input type="hidden" name="action" value="reject">
+                                        <button type="submit" class="reject-btn">拒绝</button>
+                                    </form>
+                                {% else %}
+                                    <span>已处理</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-data">暂无归还申请</div>
+        {% endif %}
+    </div>
+</body>
+</html>

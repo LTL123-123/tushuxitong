@@ -1,0 +1,158 @@
+/* 背景图样式 */
+.bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("/static/images/library-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.6);
+    z-index: -1;
+}
+
+/* 全局样式 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* 登录容器 */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* 登录卡片 */
+.login-card {
+    width: 400px;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 登录标题 */
+.login-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 22px;
+}
+
+/* 表单项（统一对齐） */
+.form-item {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* 表单标签（固定宽度+右对齐） */
+.form-item label {
+    width: 90px;
+    text-align: right;
+    margin-right: 15px;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+/* 输入框和下拉框（占满剩余宽度） */
+.form-item input, .form-item select {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+/* 表单操作区 */
+.form-actions {
+    margin-top: 25px;
+    text-align: center;
+}
+
+/* 登录按钮 */
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #3367d6;
+}
+
+/* 链接组（水平并列+居中） */
+.link-group {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;  /* 链接之间的间距 */
+    font-size: 14px;
+}
+
+/* 分隔线 */
+.divider {
+    color: #ccc;
+}
+
+/* 注册账号链接 */
+.register-link {
+    color: #4285f4;
+    text-decoration: none;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+/* 忘记密码链接 */
+.forgot-link {
+    color: #666;
+    text-decoration: none;
+}
+
+.forgot-link:hover {
+    color: #4285f4;
+    text-decoration: underline;
+}
+
+/* 提示框 */
+.alert {
+    color: #d93025;
+    padding: 12px;
+    margin-bottom: 20px;
+    background-color: #fef0f0;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+}
+/* 注册页面提示文字 */
+.form-item .tip {
+    display: none;
+    margin-left: 10px;
+    font-size: 12px;
+    color: #d93025;
+}
+.return-request-btn {
+    padding: 6px 12px;
+    background-color: #fbbc05;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 13px;
+}
